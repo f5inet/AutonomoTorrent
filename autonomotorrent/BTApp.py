@@ -8,10 +8,10 @@ from twisted.python import log
 from twisted.internet import reactor
 from twisted.internet import task 
 
-from autonomotorrent.BTManager import BTManager
-from autonomotorrent.factory import BTServerFactories
-from autonomotorrent.MetaInfo import BTMetaInfo
-from autonomotorrent.DHTProtocol import DHTProtocol
+from BTManager import BTManager
+from factory import BTServerFactories
+from MetaInfo import BTMetaInfo
+from DHTProtocol import DHTProtocol
 
 class BTConfig(object):
     def __init__(self, torrent_path=None, meta_info=None):
@@ -27,7 +27,7 @@ class BTConfig(object):
 
     def check(self) :
         if self.downloadList is None:
-            self.downloadList = range(len(self.metainfo.files))
+            self.downloadList = list(range(len(self.metainfo.files)))
         for i in self.downloadList :
             f = self.metainfo.files[i]
             size = f['length']
@@ -58,8 +58,8 @@ class BTApp:
         if remote_debugging:
             log.msg("Turning remote debugging on. You may login via telnet " +\
                 "on port 9999 username & password are 'admin'")
-            import twisted.manhole.telnet
-            dbg = twisted.manhole.telnet.ShellFactory()
+            import twisted.conch.telnet
+            dbg = twisted.conch.telnet.ShellFactory()
             dbg.username = "admin"
             dbg.password = "admin"
             dbg.namespace['app'] = self 

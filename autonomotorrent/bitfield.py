@@ -1,5 +1,10 @@
 from array import array
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 counts = [chr(sum([(i >> j) & 1 for j in xrange(8)])) for i in xrange(256)]
 counts = ''.join(counts)
 
@@ -19,9 +24,9 @@ class Bitfield (BitOp):
         if bitstring is None:
             self.numzeros = length
             if extra:
-                self.bits = array('B', chr(0) * (rlen + 1))
+                self.bits = array('B', bytes(chr(0).encode()) * (rlen + 1))
             else:
-                self.bits = array('B', chr(0) * rlen)
+                self.bits = array('B', bytes(chr(0).encode()) * rlen)
         else:
             if extra:
                 if len(bitstring) != rlen + 1:

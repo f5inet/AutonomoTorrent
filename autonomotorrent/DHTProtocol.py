@@ -13,7 +13,7 @@ from twisted.internet import reactor
 from twisted.internet import protocol, defer
 from twisted.python import log
 
-from bencode import bencode, bdecode, BTError
+from bencode import bencode, bdecode
 
 def sleep(timeout):
     df = defer.Deferred()
@@ -61,7 +61,7 @@ def decodeCompactNodes(compNodes):
         raise ValueError('len(compNodes) % 26 != 0')
     
     nodes = []
-    for i in xrange(0, len(compNodes), 26) :
+    for i in range(0, len(compNodes), 26) :
         dat = compNodes[i:(i+26)]
         _id = dat[0:20]
         ip, port = decodeIPAddr(dat[20:26])
@@ -99,7 +99,7 @@ class RoutingTable :
         self.nodes_dict = {}
         del self.bucket[:]
 
-        [self.addNode(addr) for addr in nodes_dict.itervalues()]
+        [self.addNode(addr) for addr in nodes_dict.values()]
 
         self.autoFillRoutingTable()
 
@@ -113,7 +113,7 @@ class RoutingTable :
 
         query_history = set()
         while len(self.nodes_dict) < 160*6:
-            for _id, addr in self.nodes_dict.iteritems():
+            for _id, addr in self.nodes_dict.items():
                 if _id not in query_history:
                     query_history.add(_id)
                     break

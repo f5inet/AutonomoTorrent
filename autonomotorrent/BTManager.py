@@ -5,7 +5,7 @@ from twisted.internet import defer
 from PieceManager import BTPieceManager
 from tools import SpeedMonitor, generate_peer_id, sleep
 from factory import ConnectionManager
-from TrackerClient import BTTrackerClient
+from TrackerClient import BTTrackerClient, BTTrackerClientDummy
 
 class BTManager (object):
     def __init__(self, app, config):
@@ -20,8 +20,11 @@ class BTManager (object):
         self.pieceManager = BTPieceManager(self)
         if len(self.metainfo.announce_list) > 0:
             self.bttrackerclient = BTTrackerClient(self)
-        else: 
-            raise Exception("Torrent needs at least one tracker")
+        elif self.app.enable_DHT==True:
+            print("TrackerLess Torrent, I will continue on DHT")
+            self.bttrackerclient = BTTrackerClientDummy(self)
+        else:
+            raise Exception("Torrent needs at least one tracker, and DHT is disabled.")
         self.status = None
 
     def startDownload(self):

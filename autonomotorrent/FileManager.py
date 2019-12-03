@@ -104,7 +104,7 @@ class BTFile:
         self.write(idx, 0, data)
 
     def __iter__(self) :
-        for idx in xrange(self.idx0_piece, self.idx1_piece) :
+        for idx in range(self.idx0_piece, self.idx1_piece) :
             yield idx, self[idx]
 
     def __len__(self) :
@@ -137,12 +137,12 @@ class BTFiles :
     def getBitfield(self) :
         bfNeed = Bitfield(self.pieceNum)
         for f in self.files :
-            for i in xrange(f.idx0_piece, f.idx1_piece) :
+            for i in range(f.idx0_piece, f.idx1_piece) :
                 bfNeed[i] = 1
 
         bfHave = Bitfield(self.pieceNum)
-        for i in xrange(self.pieceNum):
-            try :
+        for i in range(self.pieceNum):
+            try:
                 ds = self[i]
                 if len(ds) == 1:
                     beg, dat = ds[0]
@@ -199,7 +199,7 @@ class BTFiles :
                 f[idx] = data
 
     def __iter__(self):
-        for idx in xrange(len(self)) :
+        for idx in range(len(self)) :
             yield idx, self[idx]
 
     def __contains__(self, idx) :

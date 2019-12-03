@@ -88,7 +88,7 @@ class SpeedMonitor (object):
 
 def generate_peer_id():
     myid = 'M' + '7-2-0' + '--' 
-    myid += hashlib.sha1(str(time.time())+ ' ' + str(os.getpid())).hexdigest()[-12:] 
+    myid += hashlib.sha1((str(time.time())+ ' ' + str(os.getpid())).encode()).hexdigest()[-12:]
     assert len(myid) == 20
     return myid
 

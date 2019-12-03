@@ -3,7 +3,7 @@
 
 from twisted.internet import reactor
 
-from bencode import bencode, bdecode, BTError
+from bencode import bencode, bdecode
 
 from twisted.python import log
 from twisted.internet import defer
@@ -11,7 +11,7 @@ from twisted.web.client import getPage
 
 from tools import sleep
 
-from urllib import urlencode
+from urllib.parse import urlencode
 import hashlib
 import socket
 import struct
@@ -70,7 +70,7 @@ class BTTrackerClient (object):
         else:
             try:
                 res = bdecode(page)
-            except BTError:
+            except ValueError:
                 log.err("Received an invalid peer list from the tracker: " +\
                     "{0}".format(url))
             else:
@@ -102,3 +102,19 @@ class BTTrackerClient (object):
                 self.getPeerList(url, data)
 
             
+class BTTrackerClientDummy(BTTrackerClient):
+    def __init__(self, btm):
+        self.btm = btm
+        self.interval = 15 * 60
+
+    @defer.inlineCallbacks
+    def start(self):
+        self.status = 'started'
+        yield sleep(1)
+
+    def stop(self):
+        self.status = 'stopped'
+
+    @defer.inlineCallbacks
+    def getPeerList(self, url, data):
+        yield sleep(self.interval)
